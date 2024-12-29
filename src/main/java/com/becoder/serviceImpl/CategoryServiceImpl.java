@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
 import com.becoder.entity.Category;
@@ -79,9 +80,13 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 	
 	@Override
-	public CategoryDto getCategoryById(Integer id) {
-		Optional<Category> category = categoryRepo.findByIdAndIsDeletedFalse(id);
-		return mapper.map(category, CategoryDto.class);
+	public CategoryDto getCategoryById(Integer id) throws Exception {
+		Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
+					.orElseThrow(() -> new ResourceNotFoundException("Category not found with id="+id));
+		if(!ObjectUtils.isEmpty(category)) {
+			return mapper.map(category, CategoryDto.class);
+		}
+		return null;
 	}
 	
 	@Override
