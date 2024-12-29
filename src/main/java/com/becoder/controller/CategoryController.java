@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
-import com.becoder.entity.Category;
 import com.becoder.service.CategoryService;
 
 @RestController
