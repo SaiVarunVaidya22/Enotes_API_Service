@@ -20,6 +20,7 @@ import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
 import com.becoder.service.CategoryService;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,7 +32,7 @@ public class CategoryController {
 	CategoryService categoryService;
 	
 	@PostMapping("/save")
-	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) {
+	public ResponseEntity<?> saveCategory(@Valid @RequestBody CategoryDto categoryDto) {
 		
 		Boolean saveCategory = categoryService.saveCategory(categoryDto);
 		if(saveCategory) {
