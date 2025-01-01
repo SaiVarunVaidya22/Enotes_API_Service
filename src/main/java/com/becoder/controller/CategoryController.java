@@ -64,7 +64,7 @@ public class CategoryController {
 	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception {
 		CategoryDto category = categoryService.getCategoryById(id);
 		if(ObjectUtils.isEmpty(category)) {
-			return CommonUtil.createErrorResponseMessage("Internal server error",HttpStatus.INTERNAL_SERVER_ERROR);
+			return CommonUtil.createErrorResponseMessage("Category Not Found",HttpStatus.NOT_FOUND);
 		}
 		return CommonUtil.createBuildResponse(category, HttpStatus.OK);
 	}
