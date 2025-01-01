@@ -1,6 +1,5 @@
 package com.becoder.serviceImpl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +12,7 @@ import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
 import com.becoder.entity.Category;
+import com.becoder.exception.ExistDataException;
 import com.becoder.repository.CategoryRepository;
 import com.becoder.service.CategoryService;
 
@@ -28,6 +28,13 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Boolean saveCategory(CategoryDto categoryDto) {
 		Category category = mapper.map(categoryDto, Category.class);
+		
+		// Check whether any Category exist or not
+		Boolean exist = categoryRepo.existsByName(categoryDto.getName().trim());
+		
+		if(exist) {
+			throw new ExistDataException("Category already exist !");
+		}
 		
 		if(ObjectUtils.isEmpty(category.getId())) {			
 			category.setIsDeleted(false);

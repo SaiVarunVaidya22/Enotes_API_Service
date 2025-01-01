@@ -12,6 +12,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.becoder.exception.ExistDataException;
+import com.becoder.util.CommonUtil;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
@@ -24,21 +27,26 @@ public class GlobalExceptionHandler {
 			String field = ((FieldError)(er)).getField();
 			error.put(field, msg);
 		});
-		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+		return CommonUtil.createErrorResponseMessage(error, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<?> handleNullPointerException(Exception e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> handleResourceNotFoundException(Exception e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(ExistDataException.class)
+	public ResponseEntity<?> handleDataExistException(ExistDataException e) {
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.CONFLICT);
 	}
 }

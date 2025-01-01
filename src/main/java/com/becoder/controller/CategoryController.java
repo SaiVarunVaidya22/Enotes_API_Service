@@ -19,6 +19,7 @@ import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
 import com.becoder.service.CategoryService;
+import com.becoder.util.CommonUtil;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +37,9 @@ public class CategoryController {
 		
 		Boolean saveCategory = categoryService.saveCategory(categoryDto);
 		if(saveCategory) {
-			return new ResponseEntity<>("Saved Successfully", HttpStatus.CREATED);			
+			return CommonUtil.createBuildResponseMessage("Saved Successfully", HttpStatus.CREATED);
 		}
-		return new ResponseEntity<>("Failed to Save",HttpStatus.INTERNAL_SERVER_ERROR);
+		return CommonUtil.createErrorResponseMessage("Failed t o Save", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@GetMapping("/")
@@ -47,7 +48,7 @@ public class CategoryController {
 		if(CollectionUtils.isEmpty(Categories)) {
 			return ResponseEntity.noContent().build();	
 		}
-		return new ResponseEntity<>(Categories, HttpStatus.OK);
+		return CommonUtil.createBuildResponse(Categories, HttpStatus.OK);
 	}
 	
 	@GetMapping("/active")
@@ -56,24 +57,24 @@ public class CategoryController {
 		if(CollectionUtils.isEmpty(Categories)) {
 			return ResponseEntity.noContent().build();	
 		}
-		return new ResponseEntity<>(Categories, HttpStatus.OK);
+		return CommonUtil.createBuildResponse(Categories, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception {
 		CategoryDto category = categoryService.getCategoryById(id);
 		if(ObjectUtils.isEmpty(category)) {
-			return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+			return CommonUtil.createErrorResponseMessage("Internal server error",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(category, HttpStatus.OK);
+		return CommonUtil.createBuildResponse(category, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id) {
 		Boolean deleted = categoryService.deleteCategory(id);
 		if(deleted) {
-			return new ResponseEntity<>("Category with id deleted", HttpStatus.OK);
+			return CommonUtil.createBuildResponseMessage("Category with id deleted", HttpStatus.OK);
 		}
-		return new ResponseEntity<>("Category with id unable to delete", HttpStatus.INTERNAL_SERVER_ERROR);
+		return CommonUtil.createErrorResponseMessage("Category not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
