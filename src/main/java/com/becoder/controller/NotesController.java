@@ -1,7 +1,9 @@
 package com.becoder.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.becoder.dto.NotesDto;
 import com.becoder.service.NotesService;
@@ -48,8 +50,8 @@ public class NotesController {
 	}
 	
 	@PostMapping("/save")
-	public ResponseEntity<?> saveNotes(@Valid @RequestBody NotesDto notesDto) throws Exception {
-		Boolean saveNotes = notesService.saveNotes(notesDto);
+	public ResponseEntity<?> saveNotes(@Valid @RequestParam String notes, @RequestParam(required = false) MultipartFile file) throws Exception {
+		Boolean saveNotes = notesService.saveNotes(notes, file);
 		if(saveNotes) {			
 			return CommonUtil.createBuildResponseMessage("Notes saved success", HttpStatus.CREATED);
 		}
