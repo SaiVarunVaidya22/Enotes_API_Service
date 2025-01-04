@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.becoder.dto.NotesDto;
+import com.becoder.entity.FileDetails;
 import com.becoder.service.NotesService;
 import com.becoder.util.CommonUtil;
 
@@ -14,7 +15,9 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +59,18 @@ public class NotesController {
 			return CommonUtil.createBuildResponseMessage("Notes saved success", HttpStatus.CREATED);
 		}
 		return CommonUtil.createErrorResponseMessage("Notes not saved", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping("/download/{id}")
+	public ResponseEntity<?> downloadFile(@PathVariable Integer id) throws Exception {
+		FileDetails fileDtls = notesService.getFileDetails(id);
+		byte[] downlodFile = notesService.downloadFile(fileDtls);
+		
+		HttpHeaders headers = new HttpHeaders();
+		String contentType = CommonUtil.getContentType(fileDtls.getOriginalFileName());
+		headers.setContentType(MediaType.parseMediaType(contentType));
+		headers.setContentDispositionFormData("attachment", fileDtls.getOriginalFileName());
+		return ResponseEntity.ok().headers(headers).body(downlodFile);
 	}
 	
 }

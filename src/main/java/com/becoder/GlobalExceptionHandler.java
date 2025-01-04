@@ -1,5 +1,6 @@
 package com.becoder;
 
+import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,5 +49,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ExistDataException.class)
 	public ResponseEntity<?> handleDataExistException(ExistDataException e) {
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(FileNotFoundException.class)
+	public ResponseEntity<?> handleFileNotFoundExceptionException(FileNotFoundException e) {
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 }
