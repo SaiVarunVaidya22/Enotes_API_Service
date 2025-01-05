@@ -53,6 +53,10 @@ public class NotesDto implements Serializable {
 	
 	private FilesDto fileDetails;
 	
+	private Boolean isDeleted;
+	
+	private Date deletedOn;
+	
 	@Getter
 	@Setter
 	@AllArgsConstructor

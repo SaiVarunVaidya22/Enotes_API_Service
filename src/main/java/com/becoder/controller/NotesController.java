@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.NotesDto;
 import com.becoder.dto.NotesResponse;
 import com.becoder.entity.FileDetails;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,6 +83,28 @@ public class NotesController {
 		Integer userId = 1;
 		NotesResponse notes = notesService.getAllNotesByUser(userId, pageNo, pageSize);
 		
+		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+	}
+	
+	@GetMapping("/delete/{id}")
+	public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception {
+		notesService.softDeleteNotes(id);
+		return CommonUtil.createBuildResponseMessage("Notes will be deleted at scheduled date & time",HttpStatus.OK);
+	}
+	
+	@GetMapping("/restore/{id}")
+	public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception {
+		notesService.restoreNotes(id);
+		return CommonUtil.createBuildResponseMessage("Notes restore success",HttpStatus.OK);
+	}
+	
+	@GetMapping("/recycle-bin")
+	public ResponseEntity<?> getUserRecycleBinNotes() throws Exception {
+		Integer userId = 1;
+		List<NotesDto> notes = notesService.getUserRecycleBinNotes(userId);
+		if(CollectionUtils.isEmpty(notes)) {
+			return CommonUtil.createBuildResponseMessage("Recycle bin is Empty", HttpStatus.OK);
+		}
 		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
 	}
 	

@@ -10,6 +10,8 @@ import com.becoder.entity.Notes;
 
 public interface NotesRepository extends JpaRepository<Notes, Integer> {
 
-	Page<Notes> findAllByCreatedBy(Integer userId, Pageable pageable);
+	Page<Notes> findAllByCreatedByAndIsDeletedFalse(Integer userId, Pageable pageable);
+
+	List<Notes> findAllByCreatedByAndIsDeletedTrue(Integer userId);
 	
 }
