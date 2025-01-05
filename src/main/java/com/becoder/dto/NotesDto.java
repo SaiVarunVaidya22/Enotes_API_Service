@@ -1,6 +1,7 @@
 package com.becoder.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -55,7 +56,7 @@ public class NotesDto implements Serializable {
 	
 	private Boolean isDeleted;
 	
-	private Date deletedOn;
+	private LocalDateTime deletedOn;
 	
 	@Getter
 	@Setter
