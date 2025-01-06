@@ -258,6 +258,7 @@ public class NotesServiceImpl implements NotesService {
 		favouriteNotesRepo.save(favouriteNotes);
 	}
 
+
 	@Override
 	public void unfavouriteNotes(Integer favouriteNoteId) throws Exception {
         FavouriteNotes favNote = favouriteNotesRepo.findById(favouriteNoteId).orElseThrow(()-> new ResourceNotFoundException("Favourite Note not found as id is invalid"));
@@ -274,4 +275,26 @@ public class NotesServiceImpl implements NotesService {
 		
 	}
 
+	@Override
+	public boolean copyNotes(Integer noteId) throws Exception {
+		Notes notes = notesRepo.findById(noteId).orElseThrow(()-> new ResourceNotFoundException("Notes not found as id is invalid"));		
+		
+		Notes copyNote = Notes.builder()
+				.title(notes.getTitle())
+				.description(notes.getDescription())
+				.category(notes.getCategory())
+				.isDeleted(false)
+				.deletedOn(null)
+				.fileDetails(null)
+				.build();
+		
+		// TODO : Need to check user validation
+		
+		Notes saveCopyNotes = notesRepo.save(copyNote);
+		if(!ObjectUtils.isEmpty(saveCopyNotes)) {
+			return true;
+		}
+		
+		return false;
+	}
 }
