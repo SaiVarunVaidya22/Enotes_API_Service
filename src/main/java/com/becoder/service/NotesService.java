@@ -41,4 +41,6 @@ public interface NotesService {
 	public List<FavouriteNoteDto> getUserFavouritenotes() throws Exception;
 
 	public void favouriteNotes(Integer noteId) throws Exception;
+
+	public boolean copyNotes(Integer noteId) throws Exception;
 }
