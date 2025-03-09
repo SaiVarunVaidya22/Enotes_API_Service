@@ -10,8 +10,10 @@ import com.becoder.dto.ToDoDto;
 import com.becoder.dto.ToDoDto.StatusDto;
 import com.becoder.dto.UserDto;
 import com.becoder.enums.TodoStatus;
+import com.becoder.exception.ExistDataException;
 import com.becoder.exception.ResourceNotFoundException;
 import com.becoder.repository.RoleRepository;
+import com.becoder.repository.UserRepository;
 
 import io.micrometer.common.util.StringUtils;
 
@@ -20,6 +22,9 @@ public class Validation {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 		
 	public void todoValidation(ToDoDto todo) throws Exception {
 		StatusDto reqStatus = todo.getStatus();
@@ -46,6 +51,12 @@ public class Validation {
 		
 		if(StringUtils.isEmpty(userDto.getEmail()) || !userDto.getEmail().matches(Constants.EMAIL_REGEX)) {
 			throw new IllegalArgumentException("Email of user invalid");
+		} else {
+			// Validate email exist already
+			Boolean existEmail = userRepository.existsByEmail(userDto.getEmail());
+			if(existEmail) {
+				throw new ExistDataException("User with this mail already exists");
+			}
 		}
 		
 		if(StringUtils.isEmpty(userDto.getMobNo()) || !userDto.getMobNo().matches(Constants.PHONE_REGEX)){
