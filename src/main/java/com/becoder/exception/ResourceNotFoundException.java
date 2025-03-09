@@ -1,4 +1,4 @@
-package com.becoder;
+package com.becoder.exception;
 
 public class ResourceNotFoundException extends Exception {
 	

@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.ToDoDto;
 import com.becoder.dto.ToDoDto.StatusDto;
 import com.becoder.entity.Todo;
 import com.becoder.enums.TodoStatus;
+import com.becoder.exception.ResourceNotFoundException;
 import com.becoder.repository.ToDoRepository;
 import com.becoder.service.ToDoService;
 import com.becoder.util.Validation;

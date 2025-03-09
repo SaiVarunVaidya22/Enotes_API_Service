@@ -2,8 +2,8 @@ package com.becoder.service;
 
 import java.util.List;
 
-import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.ToDoDto;
+import com.becoder.exception.ResourceNotFoundException;
 
 public interface ToDoService {
 	

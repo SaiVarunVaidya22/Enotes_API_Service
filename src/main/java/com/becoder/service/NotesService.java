@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.FavouriteNoteDto;
 import com.becoder.dto.NotesDto;
 import com.becoder.dto.NotesResponse;
 import com.becoder.entity.FileDetails;
+import com.becoder.exception.ResourceNotFoundException;
 
 import jakarta.validation.Valid;
 

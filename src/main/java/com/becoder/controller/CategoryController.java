@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.becoder.ResourceNotFoundException;
 import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
+import com.becoder.exception.ResourceNotFoundException;
 import com.becoder.service.CategoryService;
 import com.becoder.util.CommonUtil;
 
