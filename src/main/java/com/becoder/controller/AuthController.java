@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.becoder.dto.UserDto;
 import com.becoder.util.CommonUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -21,8 +23,9 @@ public class AuthController {
 	private UserService userService;
 	
 	@PostMapping("")
-	public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) throws Exception {
-		Boolean register = userService.register(userDto);
+	public ResponseEntity<?> registerUser(@RequestBody UserDto userDto,HttpServletRequest request) throws Exception {
+		String serverBaseUrl = CommonUtil.getUrl(request);
+		Boolean register = userService.register(userDto, serverBaseUrl);
 		if(register) {
 			return CommonUtil.createBuildResponseMessage("Registration Successful", HttpStatus.CREATED);
 		}

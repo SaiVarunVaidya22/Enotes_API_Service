@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.becoder.util.CommonUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
@@ -33,36 +36,49 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<?> handleNullPointerException(Exception e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> handleResourceNotFoundException(Exception e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(SuccessException.class)
+	public ResponseEntity<?> handleSuccessException(Exception e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.OK);
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<?> handleIllegalArgumentException(Exception e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(ExistDataException.class)
 	public ResponseEntity<?> handleDataExistException(ExistDataException e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler(FileNotFoundException.class)
 	public ResponseEntity<?> handleFileNotFoundExceptionException(FileNotFoundException e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+		log.error("GlobalExceptionHandler :: handleException :: ",e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 }
