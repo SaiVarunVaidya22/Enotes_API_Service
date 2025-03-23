@@ -9,11 +9,13 @@ import java.util.Map;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.becoder.entity.User;
 import com.becoder.service.JwtService;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -45,7 +47,7 @@ public class JwtServiceImpl implements JwtService{
 		.claims().add(claims)
 		.subject(user.getEmail())
 		.issuedAt(new Date(System.currentTimeMillis()))
-		.expiration(new Date(System.currentTimeMillis() + 60*60*10))
+		.expiration(new Date(System.currentTimeMillis() + 60*60*100))
 		.and()
 		.signWith(getKey())
 		.compact();
@@ -58,5 +60,51 @@ public class JwtServiceImpl implements JwtService{
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
+	
+	public String role(String token) {
+		Claims claims = extractAllClaims(token);
+		return (String)claims.get("role");
+	}
+	
+	@Override
+	public String extractUsername(String token) {
+		Claims claims = extractAllClaims(token);
+		return claims.getSubject();
+	}
+	
+	private Claims extractAllClaims(String token) {
+		Claims claims = Jwts.parser()
+			.verifyWith(decryptKey(secretKey))
+			.build()
+			.parseSignedClaims(token)
+			.getPayload();
+		return claims;
+	}
 
+	private SecretKey decryptKey(String secretKey2) {
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey2);
+		SecretKey sk = Keys.hmacShaKeyFor(keyBytes);
+		return sk;
+	}
+
+	@Override
+	public Boolean validateToken(String token, UserDetails userDetails) {
+		
+		String username = extractUsername(token);
+		Boolean isExpired = isTokenExpired(token);
+		
+		// Comparing both the User name and expiration date
+		if(username.equalsIgnoreCase(userDetails.getUsername()) && !isExpired) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	private Boolean isTokenExpired(String token) {
+		Claims claims = extractAllClaims(token);
+		Date expiredDate = claims.getExpiration();
+		
+		return expiredDate.before(new Date());
+	}
 }
